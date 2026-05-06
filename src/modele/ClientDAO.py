@@ -62,7 +62,7 @@ class ClientDAO:
                     # Resultat
                     result = cursor.fetchone()
                     # Retour
-                    return result
+                    return result[0]
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
             return None
