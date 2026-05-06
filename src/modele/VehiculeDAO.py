@@ -262,7 +262,7 @@ class VehiculeDAO:
                     # Resultat
                     result = cursor.fetchone()
                     # Retour
-                    return result["tarif journalier"]
+                    return result["tarif_journalier"]
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
             return None

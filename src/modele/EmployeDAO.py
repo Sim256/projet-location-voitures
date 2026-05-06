@@ -40,7 +40,7 @@ class EmployeDAO:
                     # Resultat
                     result = cursor.fetchone()
                     # Retour
-                    return result[0]
+                    return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
             return None
@@ -60,7 +60,7 @@ class EmployeDAO:
                     # Resultat
                     result = cursor.fetchone()
                     # Retour
-                    return result
+                    return result[0]
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
             return None
