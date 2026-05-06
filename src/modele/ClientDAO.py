@@ -62,7 +62,7 @@ class ClientDAO:
                     # Resultat
                     result = cursor.fetchone()
                     # Retour
-                    return result[0]
+                    return result[0] if result else None
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
             return None
@@ -180,7 +180,7 @@ class ClientDAO:
                     # Commit des changements
                     connection.commit()
                     # Retour 
-                    return cursor.lastrowid
+                    return True
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
             return None

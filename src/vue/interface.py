@@ -30,6 +30,8 @@ rapport annuel de l’année 2016. Il pourra, une fois identifié, accéder à c
 annuel + évolution mensuelle du chiffre pour cette même année).
 """
 
+from datetime import date
+
 
 class VueTerminal:
     """Classe représentant la vue en ligne de commande pour l'application de location de voitures"""
@@ -63,7 +65,7 @@ class VueTerminal:
         print("NB: En cas de modification, laissez les champs que vous ne souhaitez pas modifier vides")
         nom = input("Nom: ")
         prenom = input("Prénom: ")
-        email = input("Email: ")
+        email = input("Email (nouvel email si modification): ")
         telephone = input("Téléphone: ")
         numero_permis = input("Numéro de permis: ")
 
@@ -83,9 +85,15 @@ class VueTerminal:
             print("Votre inscription/modification a échoué. Une erreur s'est produite, veuillez réessayer.")
     
     def get_email_client(self):
-        """Récupère l'email du client dans le but de récupérer ses informations personnelles ou de les modifier ou de procéder à sa désinscription"""
+        """Récupère l'email du client dans le but de récupérer ses informations personnelles ou de procéder à sa désinscription"""
         print("=== Informations personnelles ===")
         email = input("Email: ")
+        return email
+
+    def get_email_client_for_update(self):
+        """Récupère l'email actuel du client avant une modification"""
+        print("=== Modification des informations personnelles ===")
+        email = input("Email actuel: ")
         return email
     
     def display_client_info(self, client_info):
@@ -130,19 +138,46 @@ class VueTerminal:
             print("---------------------------")
         print("===========================")
         return input("Entrez l'ID de la voiture que vous souhaitez louer: ")
+
+    def display_rental_amount(self, prix_total, nb_jours, prix_journalier):
+        """Affiche le montant a payer pour la location"""
+        print("=== Montant de la location ===")
+        print(f"Jours: {nb_jours}")
+        print(f"Tarif journalier: {prix_journalier} €")
+        print(f"Montant total: {prix_total:.2f} €")
+        print("==============================")
     
     def get_rental_dates(self):
         """Récupère les dates de début et de fin de location saisies par le client"""
         print("=== Dates de location ===")
-        année_debut = int(input("Année de début (YYYY): "))
-        mois_debut = int(input("Mois de début (MM): "))
-        jour_debut = int(input("Jour de début (DD): "))
-        date_debut = (année_debut, mois_debut, jour_debut)
-        année_fin = int(input("Année de fin (YYYY): "))
-        mois_fin = int(input("Mois de fin (MM): "))
-        jour_fin = int(input("Jour de fin (DD): "))  
-        date_fin = (année_fin, mois_fin, jour_fin)
-        return date_debut, date_fin
+        today = date.today()
+        while True:
+            date_debut = self._read_date_value("début")
+            if date_debut < today:
+                print("La date de debut doit etre aujourd'hui ou apres.")
+                continue
+
+            date_fin = self._read_date_value("fin")
+            if date_fin < date_debut:
+                print("La date de fin doit etre apres la date de debut.")
+                continue
+
+            return (date_debut.year, date_debut.month, date_debut.day), (date_fin.year, date_fin.month, date_fin.day)
+
+    def _read_date_value(self, label):
+        while True:
+            try:
+                année = int(input(f"Année de {label} (YYYY): "))
+                mois = int(input(f"Mois de {label} (MM): "))
+                jour = int(input(f"Jour de {label} (DD): "))
+            except ValueError:
+                print("Valeur invalide. Merci de saisir des nombres.")
+                continue
+
+            try:
+                return date(année, mois, jour)
+            except ValueError:
+                print("Date invalide, veuillez reessayer.")
     
     def get_payment_infos(self):
         """Récupère le moyen de paiement choisi par le client"""

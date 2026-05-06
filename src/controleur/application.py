@@ -66,8 +66,26 @@ class Application:
                     self.vue.display_client_info(client_info)
                 case '3':
                     # Modifier les informations personnelles
+                    email = self.vue.get_email_client_for_update()
+                    id_client = self.client_dao.get_id_client_by_email(email)
+                    if not id_client:
+                        self.vue.display_client_info(None)
+                        continue
+
                     client_data = self.vue.sing_up_client()
-                    result = self.client_dao.update_client(**client_data)
+                    updates = {}
+                    for key, value in client_data.items():
+                        if value is None:
+                            updates[key] = None
+                            continue
+                        stripped = value.strip()
+                        updates[key] = stripped if stripped != "" else None
+
+                    if all(value is None for value in updates.values()):
+                        self.vue.sign_up_validation_message(True)
+                        continue
+
+                    result = self.client_dao.update_client(id_client=id_client, **updates)
                     self.vue.sign_up_validation_message(result)
                 case '4':
                     # Désinscription
@@ -92,23 +110,32 @@ class Application:
                     id_vehicule = self.vue.display_available_cars_menu(vehicules_disponibles)
                     # Récupération des dates de début et de fin de location
                     date_debut, date_fin = self.vue.get_rental_dates()
+                    date_debut_db = date(date_debut[0], date_debut[1], date_debut[2])
+                    date_fin_db = date(date_fin[0], date_fin[1], date_fin[2])
                     # Calcule du nombre de jours
-                    nb_jours = days_between(date_debut, date_fin)
+                    nb_jours = days_between(date_debut_db, date_fin_db)
                     # Prix total de la location
 
                     prix_journalier = self.vehicule_dao.get_tarif_journalier_vehicule_by_id(id_vehicule=id_vehicule)
                     # Erreur de typage connue 
                     prix_total = nb_jours * prix_journalier
+                    self.vue.display_rental_amount(prix_total, nb_jours, prix_journalier)
                     # Récupération du moyen de paiement et le montant choisi
                     moyen_paiement, montant = self.vue.get_payment_infos()
                     # Création de la location
                     kilometrage_depart = self.vehicule_dao.get_kilometrage_actuel_vehicule_by_id(id_vehicule)
                     id_agence_depart = self.vehicule_dao.get_id_agence_vehicule_by_id(id_vehicule)
                     id_agence_retour = id_agence_depart
-                    id_categorie = self.vehicule_dao.get_id_categorie_vehicule_by_id(id_vehicule)
                     # Création de la reservation
-                    id_reservation = self.reservation_dao.create_reservation(date_debut, date_fin, 'en cours', id_client, id_vehicule, id_categorie )
-                    id_location = self.location_dao.create_location(date_debut, date_fin, prix_total, 'en cours', kilometrage_depart, None, id_client, id_vehicule, id_reservation, id_agence_depart, id_agence_retour)
+                    id_reservation = self.reservation_dao.create_reservation(
+                        date_debut_db,
+                        date_fin_db,
+                        'en cours',
+                        id_client,
+                        id_vehicule=id_vehicule,
+                        id_categorie=None
+                    )
+                    id_location = self.location_dao.create_location(date_debut_db, date_fin_db, prix_total, 'en cours', kilometrage_depart, None, id_client, id_vehicule, id_reservation, id_agence_depart, id_agence_retour)
                     # Comfirmation
                     self.vue.display_rental_confirmation(id_location)
                 case '6':
@@ -133,6 +160,11 @@ class Application:
 
 def days_between(date1, date2):
     """Calcule le nombre de jours entre deux dates"""
-    d1 = date(date1[0], date1[1], date1[2])
-    d2 = date(date2[0], date2[1], date2[2])
+    d1 = _coerce_date(date1)
+    d2 = _coerce_date(date2)
     return abs((d2 - d1).days)
+
+def _coerce_date(value):
+    if isinstance(value, date):
+        return value
+    return date(value[0], value[1], value[2])
