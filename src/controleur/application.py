@@ -62,6 +62,9 @@ class Application:
                     # Informations personnelles
                     email = self.vue.get_email_client()
                     id_client = self.client_dao.get_id_client_by_email(email)
+                    if not id_client:
+                        self.vue.display_client_info(None)
+                        continue
                     client_info = self.client_dao.get_client_by_id(id_client)
                     self.vue.display_client_info(client_info)
                 case '3':
@@ -91,6 +94,9 @@ class Application:
                     # Désinscription
                     email = self.vue.get_email_client()
                     id_client = self.client_dao.get_id_client_by_email(email)
+                    if not id_client:
+                        self.vue.display_client_info(None)
+                        continue
                     result = self.client_dao.desinscription_client_by_id(id_client)
                     self.vue.is_desinscription_confirmed(result)
                 case '5':
@@ -105,6 +111,9 @@ class Application:
                     """
                     email = self.vue.get_email_client()
                     id_client = self.client_dao.get_id_client_by_email(email)
+                    if not id_client:
+                        self.vue.display_client_info(None)
+                        continue
                     # Affichage des voitures disponibles (uniquement)
                     vehicules_disponibles = self.vue_dao.get_vehicules_disponibles()
                     id_vehicule = self.vue.display_available_cars_menu(vehicules_disponibles)
@@ -136,6 +145,9 @@ class Application:
                         id_categorie=None
                     )
                     id_location = self.location_dao.create_location(date_debut_db, date_fin_db, prix_total, 'en cours', kilometrage_depart, None, id_client, id_vehicule, id_reservation, id_agence_depart, id_agence_retour)
+                    # Création du paiement
+                    date_paiement_actuelle = date.today()
+                    self.paiement_dao.create_paiement(date_paiement_actuelle, montant, moyen_paiement, 'effectue', id_location)
                     # Comfirmation
                     self.vue.display_rental_confirmation(id_location)
                 case '6':
@@ -151,9 +163,53 @@ class Application:
                     comptable = self.comptable_dao.get_comptable_by_id(id_employe)
                     if self.vue.is_comptabilite_member_valid(comptable):
                         year = self.vue.get_year_for_sales_report()
-                        report_mensuel = self.vue_dao.get_chiffre_affaires_mensuel_by_annee(year)
-                        report_annuel = self.vue_dao.get_chiffre_affaires_annuel(year)
-                        self.vue.display_sales_report(report_mensuel, report_annuel, year)
+                        # Utilisation du rôle comptable_user pour démontrer les permissions RGPD/Sécurité
+                        compta_vue_dao = VueDAO(host='localhost', user='comptable_user', password='compta123', database='location_voitures', port=3307)
+                        report_mensuel = compta_vue_dao.get_chiffre_affaires_mensuel_by_annee(year)
+                        report_annuel = compta_vue_dao.get_chiffre_affaires_annuel(year)
+                        chiffre_annuel = report_annuel[1] if report_annuel else 0
+                        self.vue.display_sales_report(chiffre_annuel, report_mensuel, year)
+
+                case '7':
+                    # Retourner un véhicule
+                    email = self.vue.get_email_client()
+                    id_client = self.client_dao.get_id_client_by_email(email)
+                    if not id_client:
+                        self.vue.display_invalid_option_message()
+                        continue
+                    
+                    all_locations = self.location_dao.get_all_locations_by_id_client(id_client)
+                    if not all_locations:
+                        self.vue.display_locations_en_cours([])
+                        continue
+
+                    # Filtrer les locations en cours
+                    locations_en_cours = [loc for loc in all_locations if loc[5] == 'en cours']
+                    id_location = self.vue.display_locations_en_cours(locations_en_cours)
+                    
+                    if not id_location:
+                        continue
+                        
+                    try:
+                        id_location = int(id_location)
+                    except ValueError:
+                        self.vue.display_invalid_option_message()
+                        continue
+                        
+                    # Vérifier que la location appartient bien à l'utilisateur et est en cours
+                    loc_to_close = next((loc for loc in locations_en_cours if loc[0] == id_location), None)
+                    if not loc_to_close:
+                        self.vue.display_invalid_option_message()
+                        continue
+                        
+                    date_retour, new_km = self.vue.get_retour_infos()
+                    id_vehicule = loc_to_close[9]
+                    
+                    # Mise à jour DB
+                    res_loc = self.location_dao.update_location(id_location=id_location, date_retour_reelle=date_retour, kilometrage_retour=new_km, statut_location='terminee')
+                    res_veh = self.vehicule_dao.update_vehicule(id_vehicule=id_vehicule, kilometrage_actuel=new_km, etat_vehicule='disponible')
+                    
+                    self.vue.display_retour_confirmation(res_loc and res_veh)
 
                 case _:
                     self.vue.display_invalid_option_message()

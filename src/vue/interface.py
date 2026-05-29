@@ -1,35 +1,3 @@
-"""
-implementations des fonctionnaliters demandées
-
-Un client doit pouvoir s’inscrire auprès de l’application en remplissant un formulaire. Les informations personnelles encodées seront
-enregistrées dans la base de données. Tant qu’il n’est pas inscrit,
-il ne pourra procéder à aucun achat, location/. . ..
-
-Un client inscrit peut accéder à ses informations personnelles et
-les modifier s’il le souhaite.
-
-Un client inscrit peut décider de se désinscrire définitivement de
-l’application. Les données personnelles liées à ce client seront alors
-définitivement supprimées de la base de données. En effet, le règlement général sur la protection des données (RGPD) oblige l’entreprise à supprimer les informations à caractère personnel du client
-désinscrit. Cependant, on souhaite garder les données historiques
-qu’il aura pu générer (historiques d’achats, . . .) du moment qu’il
-ne soit pas possible de retrouver l’identité du client sur la base de
-ces données historiques
-
-Un client inscrit peut procéder à un achat, à une location, à une
-commande, . . .
-
-Les membres du service comptabilité (et uniquement eux) doivent
-pouvoir accéder au rapport annuel des ventes. Ce dernier affichera,
-pour une année introduite par l’utilisateur :
-- Le chiffre d’affaires annuel de cette année
-- Les chiffres d’affaires mensuels de cette même année
-
-Exemple : un membre du service de comptabilité veut accéder au
-rapport annuel de l’année 2016. Il pourra, une fois identifié, accéder à ce rapport de 2016 auprès de l’application (chiffre d’affaires
-annuel + évolution mensuelle du chiffre pour cette même année).
-"""
-
 from datetime import date
 
 
@@ -45,6 +13,7 @@ class VueTerminal:
         print("4. Désinscription")
         print("5. Louer une voiture")
         print("6. Rapport annuel des ventes")
+        print("7. Retourner un véhicule")
         print("=======================")
         return input("Choisissez une option: ")
     
@@ -204,6 +173,39 @@ class VueTerminal:
         else:
             print("Votre location a échoué. Une erreur s'est produite, veuillez réessayer.")
 
+    # ==== Gestion du retour de location ====
+
+    def display_locations_en_cours(self, locations):
+        """Affiche les locations en cours d'un client et demande d'en sélectionner une"""
+        print("=== Vos locations en cours ===")
+        if not locations:
+            print("Vous n'avez aucune location en cours.")
+            return None
+        for loc in locations:
+            print(f"ID Location: {loc[0]}, Véhicule ID: {loc[9]}, Date début: {loc[1]}, Date fin prévue: {loc[2]}")
+        print("==============================")
+        return input("Entrez l'ID de la location que vous souhaitez clôturer: ")
+
+    def get_retour_infos(self):
+        """Récupère la date de retour réelle et le kilométrage actuel du véhicule"""
+        print("=== Retour de véhicule ===")
+        date_retour = self._read_date_value("retour")
+        date_r = date(date_retour.year, date_retour.month, date_retour.day)
+        while True:
+            try:
+                kilometrage = int(input("Nouveau kilométrage du véhicule : "))
+                break
+            except ValueError:
+                print("Veuillez entrer un nombre valide.")
+        return date_r, kilometrage
+
+    def display_retour_confirmation(self, valide):
+        """Affiche un message de succès ou d'erreur pour le retour"""
+        if valide:
+            print("Le retour de véhicule a bien été enregistré. Merci !")
+        else:
+            print("Une erreur s'est produite lors de l'enregistrement du retour.")
+
     # ==== Gestion du rapport annuel des ventes ====
 
     def get_email_member_comptabilite(self):
@@ -232,7 +234,7 @@ class VueTerminal:
         print("=== Rapport annuel des ventes de l'année", year, "===")
         print(f"Chiffre d'affaires annuel: {annual_revenue} €")
         print("Chiffres d'affaires mensuels:")
-        for month, revenue in monthly_revenues.items():
-            print(f"{month}: {revenue} €")
+        for row in monthly_revenues:
+            print(f"Mois {row[1]}: {row[2]} €")
         print("===============================")
 
