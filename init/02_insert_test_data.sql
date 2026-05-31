@@ -21,7 +21,7 @@ INSERT INTO Vehicule (immatriculation, marque, modele, annee, kilometrage_actuel
 VALUES
 ('1-ABC-123', 'Renault', 'Clio', 2022, 25000, 'disponible', 40.00, 1, 1),
 ('1-DEF-456', 'Peugeot', '208', 2023, 18000, 'disponible', 45.00, 1, 1),
-('1-GHI-789', 'Toyota', 'RAV4', 2021, 32000, 'reserve', 75.00, 2, 2);
+('1-GHI-789', 'Toyota', 'RAV4', 2021, 32000, 'loue', 75.00, 2, 2);
 
 INSERT INTO Employe (nom, prenom, email, telephone, date_embauche, id_agence)
 VALUES
@@ -38,17 +38,17 @@ INSERT INTO Comptable (id_employe, description_role, salaire)
 VALUES
 (2, 'Employe ayant acces aux rapports financiers', 3200.00);
 
-INSERT INTO Reservation (date_reservation, date_debut, date_fin_prevue, statut_reservation, id_client, id_vehicule, id_categorie)
+INSERT INTO Reservation (date_reservation, date_debut, date_fin_prevue, statut_reservation, id_client, id_vehicule)
 VALUES
-('2026-03-15', '2026-04-10', '2026-04-15', 'confirmee', 1, 1, NULL),
-('2026-03-18', '2026-04-12', '2026-04-18', 'en_attente', 2, NULL, 2),
-('2026-03-20', '2026-04-20', '2026-04-22', 'annulee', 3, 2, NULL);
+('2026-03-15', '2026-04-10', '2026-04-15', 'confirmee', 1, 1),
+('2026-03-18', '2026-04-12', '2026-04-18', 'confirmee', 2, 3),
+('2026-03-20', '2026-04-20', '2026-04-22', 'annulee', 3, 2);
  
-INSERT INTO  Location (date_debut, date_fin_prevue, date_retour_reelle, prix_total, statut_location, kilometrage_depart, kilometrage_retour, id_client, id_vehicule, id_reservation, id_agence_depart, id_agence_retour)
+INSERT INTO Location (date_debut, date_fin_prevue, date_retour_reelle, prix_total, statut_location, kilometrage_depart, kilometrage_retour, id_client, id_vehicule, id_reservation, id_agence_depart, id_agence_retour)
 VALUES
 ('2026-04-10', '2026-04-15', '2026-04-15', 200.00, 'terminee', 25000, 25520, 1, 1, 1, 1, 1),
 ('2026-04-05', '2026-04-08', '2026-04-09', 135.00, 'terminee', 18000, 18310, 2, 2, NULL, 1, 1),
-('2026-04-12', '2026-04-18', NULL, 450.00, 'en_cours', 32000, NULL, 2, 3, NULL, 2, 2);
+('2026-04-12', '2026-04-18', NULL, 450.00, 'en_cours', 32000, NULL, 2, 3, 2, 2, 2);
 
 INSERT INTO Paiement (date_paiement, montant, moyen_paiement, statut_paiement, id_location)
 VALUES

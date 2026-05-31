@@ -1,20 +1,20 @@
--Lancer le projet
-1)-. Ouvrir le projet
-Ouvrir le dossier `projet-location-voitures` dans VS Code.
+# Projet Location de Voitures
 
-2)-. Vérifier que Docker Desktop est lancé
-Avant de lancer le projet, il faut ouvrir Docker Desktop et attendre qu’il soit complètement démarré.
+Ce projet contient une base de données MySQL pour gérer une agence de location de voitures.
 
-3)-. Lancer la base de données
-Dans le terminal de VS Code, exécuter :
+## Structure du projet
 
-docker compose down -v
+Le dossier `init` contient les fichiers SQL suivants :
+
+- `01_create_tables.sql` : création des tables
+- `02_insert_test_data.sql` : insertion des données de test
+- `03_views.sql` : création des vues
+- `04_triggers.sql` : création des triggers
+- `05_permissions.sql` : création des utilisateurs et des permissions
+
+## Lancer le projet
+
+Pour lancer la base de données :
+
+```bash
 docker compose up -d
-Dans le terminal, exécuter :
-docker exec -it location_voitures_mysql mysql -u root -p
-Puis entrer le mot de passe :root123
-Dans MySQL, exécuter :USE location_voitures;
-Pour afficher les tables :SHOW TABLES;
-Pour voir les données d’une table :SELECT * FROM Client;
-                                SELECT * FROM Vehicule;
-                                SELECT * FROM Reservation;

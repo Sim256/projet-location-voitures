@@ -55,12 +55,10 @@ CREATE TABLE Reservation (
     date_fin_prevue DATE NOT NULL,
     statut_reservation VARCHAR(50) NOT NULL,
     id_client INT NOT NULL,
-    id_vehicule INT,
-    id_categorie INT,
+    id_vehicule INT NOT NULL,
     PRIMARY KEY (id_reservation),
     FOREIGN KEY (id_client) REFERENCES Client(id_client),
-    FOREIGN KEY (id_vehicule) REFERENCES Vehicule(id_vehicule),
-    FOREIGN KEY (id_categorie) REFERENCES CategorieVehicule(id_categorie)
+    FOREIGN KEY (id_vehicule) REFERENCES Vehicule(id_vehicule)
 );
 CREATE TABLE Location (
     id_location INT AUTO_INCREMENT,
