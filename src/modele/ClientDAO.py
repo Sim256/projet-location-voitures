@@ -192,9 +192,9 @@ class ClientDAO:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
                     # Requête 
-                    query = "UPDATE Client SET nom = 'Anonyme', prenom = 'Anonyme', email = NULL, telephone = NULL, numero_permis = NULL, date_desinscription = NOW(), est_anonymise = TRUE WHERE id_client = %s"
+                    query = "UPDATE Client SET nom = 'Anonyme', prenom = 'Anonyme', email = CONCAT('anonyme_', %s, '@email.com'), telephone = NULL, numero_permis = CONCAT('anonyme_', %s), date_desinscription = NOW(), est_anonymise = TRUE WHERE id_client = %s"
                     # Parametres
-                    value = (id_client,)
+                    value = (id_client, id_client, id_client)
                     # Execution 
                     cursor.execute(query, value)
                     # Commit des changements

@@ -161,16 +161,16 @@ class AgenceDAO:
             print(f"Error while connecting to MySQL: {e}")
             return None
     
-    def update_agence(self, id_agence, nom=None, adresse=None, ville=None, code_postal=None, telephone=None):
+    def update_agence(self, id_agence, nom_agence=None, adresse=None, ville=None, code_postal=None, telephone=None):
         """Met à jour une agence"""
 
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
                     # Construction de la requete avec utilisation de placeholerd pour éviter les injections SQL
-                    query = "UPDATE Agence SET nom = COALESCE(%s, nom), adresse = COALESCE(%s, adresse), ville = COALESCE(%s, ville), code_postal = COALESCE(%s, code_postal), telephone = COALESCE(%s, telephone) WHERE id_agence = %s"
+                    query = "UPDATE Agence SET nom_agence = COALESCE(%s, nom_agence), adresse = COALESCE(%s, adresse), ville = COALESCE(%s, ville), code_postal = COALESCE(%s, code_postal), telephone = COALESCE(%s, telephone) WHERE id_agence = %s"
                     # Construction du tuple de parametres pour la requete
-                    values = (nom, adresse, ville, code_postal, telephone, id_agence)
+                    values = (nom_agence, adresse, ville, code_postal, telephone, id_agence)
                     # Execution de la requete avec les parametres
                     cursor.execute(query, values)
                     # Validation de la transaction pour rendre definitif les modifications

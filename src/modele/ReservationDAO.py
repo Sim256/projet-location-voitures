@@ -274,9 +274,9 @@ class ReservationDAO:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
                     # Requête 
-                    query = "INSERT INTO Reservation (date_reservation, date_debut, date_fin_prevue, statut_reservation, id_client, id_vehicule, id_categorie) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                    query = "INSERT INTO Reservation (date_reservation, date_debut, date_fin_prevue, statut_reservation, id_client, id_vehicule) VALUES (%s, %s, %s, %s, %s, %s)"
                     # Parametres
-                    values = (datetime.now().strftime('%Y-%m-%d'), date_debut, date_fin_prevue, statut_reservation, id_client, id_vehicule, id_categorie)
+                    values = (datetime.now().strftime('%Y-%m-%d'), date_debut, date_fin_prevue, statut_reservation, id_client, id_vehicule)
                     # Execution 
                     cursor.execute(query, values)
                     # Commit pour sauvegarder les changements
@@ -294,9 +294,9 @@ class ReservationDAO:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
                     # Construction de la requete de mise à jour dynamique en fonction des paramètres fournis
-                    query = "UPDATE Reservation SET date_reservation = COALESCE(%s, date_reservation), date_debut = COALESCE(%s, date_debut), date_fin_prevue = COALESCE(%s, date_fin_prevue), statut_reservation = COALESCE(%s, statut_reservation), id_client = COALESCE(%s, id_client), id_vehicule = COALESCE(%s, id_vehicule), id_categorie = COALESCE(%s, id_categorie) WHERE id_reservation = %s"
+                    query = "UPDATE Reservation SET date_reservation = COALESCE(%s, date_reservation), date_debut = COALESCE(%s, date_debut), date_fin_prevue = COALESCE(%s, date_fin_prevue), statut_reservation = COALESCE(%s, statut_reservation), id_client = COALESCE(%s, id_client), id_vehicule = COALESCE(%s, id_vehicule) WHERE id_reservation = %s"
                     # Parametres
-                    values = (date_reservation, date_debut, date_fin_prevue, statut_reservation, id_client, id_vehicule, id_categorie, id_reservation)
+                    values = (date_reservation, date_debut, date_fin_prevue, statut_reservation, id_client, id_vehicule, id_reservation)
                     # Execution 
                     cursor.execute(query, values)
                     # Commit pour sauvegarder les changements

@@ -23,16 +23,16 @@ class FraisSupplementaireDAO:
             'port': port # Il faut s'assurer que le port de docker est le meme 
         }
 
-    def get_frais_supplementaires_by_id(self, id_frais_supplementaires):
+    def get_frais_supplementaires_by_id(self, id_frais):
         """Récupère les frais supplémentaires par son ID"""
 
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
                     # Requête 
-                    query = "SELECT * FROM FraisSupplementaires WHERE id_frais_supplementaires = %s"
+                    query = "SELECT * FROM FraisSupplementaire WHERE id_frais = %s"
                     # Parametres
-                    value = (id_frais_supplementaires,)
+                    value = (id_frais,)
                     # Execution 
                     cursor.execute(query, value)
                     # Resultat
@@ -50,7 +50,7 @@ class FraisSupplementaireDAO:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
                     # Requête 
-                    query = "SELECT * FROM FraisSupplementaires"
+                    query = "SELECT * FROM FraisSupplementaire"
                     # Execution 
                     cursor.execute(query)
                     # Resultat
@@ -61,16 +61,16 @@ class FraisSupplementaireDAO:
             print(f"Error while connecting to MySQL: {e}")
             return None
         
-    def get_montant_frais_supplementaires_by_id(self, id_frais_supplementaires):
+    def get_montant_frais_supplementaires_by_id(self, id_frais):
         """Récupère le montant des frais supplémentaires par son ID"""
 
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
                     # Requête 
-                    query = "SELECT montant FROM FraisSupplementaires WHERE id_frais_supplementaires = %s"
+                    query = "SELECT montant FROM FraisSupplementaire WHERE id_frais = %s"
                     # Parametres
-                    value = (id_frais_supplementaires,)
+                    value = (id_frais,)
                     # Execution 
                     cursor.execute(query, value)
                     # Resultat
@@ -81,16 +81,16 @@ class FraisSupplementaireDAO:
             print(f"Error while connecting to MySQL: {e}")
             return None
         
-    def get_description_frais_supplementaires_by_id(self, id_frais_supplementaires):
+    def get_description_frais_supplementaires_by_id(self, id_frais):
         """Récupère la description des frais supplémentaires par son ID"""
 
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
                     # Requête 
-                    query = "SELECT description FROM FraisSupplementaires WHERE id_frais_supplementaires = %s"
+                    query = "SELECT description FROM FraisSupplementaire WHERE id_frais = %s"
                     # Parametres
-                    value = (id_frais_supplementaires,)
+                    value = (id_frais,)
                     # Execution 
                     cursor.execute(query, value)
                     # Resultat
@@ -108,7 +108,7 @@ class FraisSupplementaireDAO:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
                     # Requête 
-                    query = "INSERT INTO FraisSupplementaires (type_frais, montant, description, date_frais, id_location) VALUES (%s, %s, %s, %s, %s)"
+                    query = "INSERT INTO FraisSupplementaire (type_frais, montant, description, date_frais, id_location) VALUES (%s, %s, %s, %s, %s)"
                     # Parametres
                     values = (type_frais, montant, description, date_frais, id_location)
                     # Execution 
@@ -120,16 +120,16 @@ class FraisSupplementaireDAO:
             print(f"Error while connecting to MySQL: {e}")
             return None
         
-    def update_frais_supplementaires(self, id_frais_supplementaires, type_frais=None, montant=None, description=None, date_frais=None, id_location=None):
+    def update_frais_supplementaires(self, id_frais, type_frais=None, montant=None, description=None, date_frais=None, id_location=None):
         """Met à jour un frais supplémentaire"""
 
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
                     # Construction de la requête de mise à jour
-                    query = "UPDATE FraisSupplementaires SET type_frais = COALESCE(%s, type_frais), montant = COALESCE(%s, montant), description = COALESCE(%s, description), date_frais = COALESCE(%s, date_frais), id_location = COALESCE(%s, id_location) WHERE id_frais_supplementaires = %s"
+                    query = "UPDATE FraisSupplementaire SET type_frais = COALESCE(%s, type_frais), montant = COALESCE(%s, montant), description = COALESCE(%s, description), date_frais = COALESCE(%s, date_frais), id_location = COALESCE(%s, id_location) WHERE id_frais = %s"
                     # Parametres
-                    values = (type_frais, montant, description, date_frais, id_location, id_frais_supplementaires)
+                    values = (type_frais, montant, description, date_frais, id_location, id_frais)
                     # Execution 
                     cursor.execute(query, values)
                     connection.commit()
@@ -139,16 +139,16 @@ class FraisSupplementaireDAO:
             print(f"Error while connecting to MySQL: {e}")
             return False
         
-    def delete_frais_supplementaires(self, id_frais_supplementaires):
+    def delete_frais_supplementaires(self, id_frais):
         """Supprime un frais supplémentaire par son ID"""
 
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
                     # Requête 
-                    query = "DELETE FROM FraisSupplementaires WHERE id_frais_supplementaires = %s"
+                    query = "DELETE FROM FraisSupplementaire WHERE id_frais = %s"
                     # Parametres
-                    value = (id_frais_supplementaires,)
+                    value = (id_frais,)
                     # Execution 
                     cursor.execute(query, value)
                     connection.commit()

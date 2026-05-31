@@ -41,16 +41,16 @@ class CategorieVehiculeDAO:
             print(f"Error while connecting to MySQL: {e}")
             return None
         
-    def get_id_categorie_by_nom(self, nom):
+    def get_id_categorie_by_nom(self, nom_categorie):
         """Récupère l'ID d'une catégorie de véhicule par son nom"""
 
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
                     # Requête 
-                    query = "SELECT id_categorie FROM CategorieVehicule WHERE nom = %s"
+                    query = "SELECT id_categorie FROM CategorieVehicule WHERE nom_categorie = %s"
                     # Parametres
-                    value = (nom,)
+                    value = (nom_categorie,)
                     # Execution 
                     cursor.execute(query, value)
                     # Resultat
@@ -119,16 +119,16 @@ class CategorieVehiculeDAO:
             print(f"Error while connecting to MySQL: {e}")
             return None
         
-    def create_categorie_vehicule(self, nom, description, tarif_base):
+    def create_categorie_vehicule(self, nom_categorie, description, tarif_base):
         """Crée une nouvelle catégorie de véhicule"""
 
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
                     # Requête 
-                    query = "INSERT INTO CategorieVehicule (nom, description, tarif_base) VALUES (%s, %s, %s)"
+                    query = "INSERT INTO CategorieVehicule (nom_categorie, description, tarif_base) VALUES (%s, %s, %s)"
                     # Parametres
-                    values = (nom, description, tarif_base)
+                    values = (nom_categorie, description, tarif_base)
                     # Execution 
                     cursor.execute(query, values)
                     # Commit pour sauvegarder les changements
@@ -139,16 +139,16 @@ class CategorieVehiculeDAO:
             print(f"Error while connecting to MySQL: {e}")
             return None
         
-    def update_categorie_vehicule(self, id_categorie, nom=None, description=None, tarif_base=None):
+    def update_categorie_vehicule(self, id_categorie, nom_categorie=None, description=None, tarif_base=None):
         """Met à jour une catégorie de véhicule"""
 
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
                     # Requête 
-                    query = "UPDATE CategorieVehicule SET nom = COALESCE(%s, nom), description = COALESCE(%s, description), tarif_base = COALESCE(%s, tarif_base) WHERE id_categorie = %s"
+                    query = "UPDATE CategorieVehicule SET nom_categorie = COALESCE(%s, nom_categorie), description = COALESCE(%s, description), tarif_base = COALESCE(%s, tarif_base) WHERE id_categorie = %s"
                     # Parametres
-                    values = (nom, description, tarif_base, id_categorie)
+                    values = (nom_categorie, description, tarif_base, id_categorie)
                     # Execution 
                     cursor.execute(query, values)
                     # Commit pour sauvegarder les changements
