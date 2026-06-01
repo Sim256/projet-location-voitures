@@ -33,15 +33,10 @@ class ClientDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT * FROM Client WHERE id_client = %s"
-                    # Parametres
                     value = (id_client,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Resultat
                     result = cursor.fetchone()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -53,15 +48,10 @@ class ClientDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT id_client FROM Client WHERE email = %s"
-                    # Parametres
                     value = (email,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Resultat
                     result = cursor.fetchone()
-                    # Retour
                     return result[0] if result else None
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -73,15 +63,10 @@ class ClientDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT id_client FROM Client WHERE numero_permis = %s"
-                    # Parametres
                     value = (numero_permis,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Resultat
                     result = cursor.fetchone()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -93,13 +78,9 @@ class ClientDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT * FROM Client"
-                    # Execution 
                     cursor.execute(query)
-                    # Resultat
                     result = cursor.fetchall()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -111,15 +92,10 @@ class ClientDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT est_anonymise FROM Client WHERE id_client = %s"
-                    # Parametres
                     value = (id_client,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Resultat
                     result = cursor.fetchone()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -131,15 +107,10 @@ class ClientDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT numero_permis FROM Client WHERE id_client = %s"
-                    # Parametres
                     value = (id_client,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Resultat
                     result = cursor.fetchone()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -151,15 +122,10 @@ class ClientDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "INSERT INTO Client (nom, prenom, email, telephone, numero_permis, date_inscription) VALUES (%s, %s, %s, %s, %s, NOW())"
-                    # Parametres
                     values = (nom, prenom, email, telephone, numero_permis)
-                    # Execution 
                     cursor.execute(query, values)
-                    # Commit des changements
                     connection.commit()
-                    # Retour 
                     return True
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -171,15 +137,10 @@ class ClientDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Construction de la requete de mise à jour avec les champs à mettre à jour
                     query = "UPDATE Client SET nom = COALESCE(%s, nom), prenom = COALESCE(%s, prenom), email = COALESCE(%s, email), telephone = COALESCE(%s, telephone), numero_permis = COALESCE(%s, numero_permis) WHERE id_client = %s"
-                    # Parametres
                     values = (nom, prenom, email, telephone, numero_permis, id_client)
-                    # Execution de la requete avec les parametres
                     cursor.execute(query, values)
-                    # Commit des changements
                     connection.commit()
-                    # Retour 
                     return True
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -191,15 +152,10 @@ class ClientDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "UPDATE Client SET nom = 'Anonyme', prenom = 'Anonyme', email = CONCAT('anonyme_', %s, '@email.com'), telephone = NULL, numero_permis = CONCAT('anonyme_', %s), date_desinscription = NOW(), est_anonymise = TRUE WHERE id_client = %s"
-                    # Parametres
                     value = (id_client, id_client, id_client)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Commit des changements
                     connection.commit()
-                    # Retour 
                     return True
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -211,15 +167,10 @@ class ClientDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "DELETE FROM Client WHERE id_client = %s"
-                    # Parametres
                     value = (id_client,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Commit des changements
                     connection.commit()
-                    # Retour 
                     return True
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")

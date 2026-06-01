@@ -28,15 +28,10 @@ class Agent_d_agenceDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT * FROM Agent_d_agence WHERE id_employe = %s"
-                    # Parametres
                     value = (id_employe,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Resultat
                     result = cursor.fetchone()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -48,13 +43,9 @@ class Agent_d_agenceDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT * FROM Agent_d_agence"
-                    # Execution 
                     cursor.execute(query)
-                    # Resultat
                     result = cursor.fetchall()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -66,15 +57,10 @@ class Agent_d_agenceDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT salaire FROM Agent_d_agence WHERE id_employe = %s"
-                    # Parametres
                     value = (id_employe,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Resultat
                     result = cursor.fetchone()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -86,15 +72,10 @@ class Agent_d_agenceDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT description_role FROM Agent_d_agence WHERE id_employe = %s"
-                    # Parametres
                     value = (id_employe,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Resultat
                     result = cursor.fetchone()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -106,16 +87,11 @@ class Agent_d_agenceDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "INSERT INTO Agent_d_agence (id_employe, description_role, salaire) VALUES (%s, %s, %s)"
-                    # Parametres
                     values = (id_employe, description_role, salaire)
-                    # Execution 
                     cursor.execute(query, values)
                     connection.commit()
-                    # Resultat
                     result = cursor.lastrowid
-                    # Retour
                     return cursor.lastrowid
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -127,15 +103,10 @@ class Agent_d_agenceDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "UPDATE Agent_d_agence SET description_role = COALESCE(%s, description_role), salaire = COALESCE(%s, salaire) WHERE id_employe = %s"
-                    # Parametres
                     values = (description_role, salaire, id_employe)
-                    # Execution 
                     cursor.execute(query, values)
-                    # Commit pour sauvegarder les changements
                     connection.commit()
-                    # Retour
                     return True
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -147,15 +118,10 @@ class Agent_d_agenceDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "DELETE FROM Agent_d_agence WHERE id_employe = %s"
-                    # Parametres
                     value = (id_employe,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Commit pour sauvegarder les changements
                     connection.commit()
-                    # Retour
                     return True
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")

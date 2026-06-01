@@ -29,15 +29,10 @@ class PaiementDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT * FROM Paiement WHERE id_paiement = %s"
-                    # Parametres
                     value = (id_paiement,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Resultat
                     result = cursor.fetchone()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -49,15 +44,10 @@ class PaiementDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT id_paiement FROM Paiement WHERE id_location = %s"
-                    # Parametres
                     value = (id_location,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Resultat
                     result = cursor.fetchone()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -70,13 +60,9 @@ class PaiementDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT * FROM Paiement"
-                    # Execution 
                     cursor.execute(query)
-                    # Resultat
                     result = cursor.fetchall()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -88,15 +74,10 @@ class PaiementDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT * FROM Paiement WHERE id_location = %s"
-                    # Parametres
                     value = (id_location,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Resultat
                     result = cursor.fetchall()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -108,15 +89,10 @@ class PaiementDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT statut_paiement FROM Paiement WHERE id_paiement = %s"
-                    # Parametres
                     value = (id_paiement,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Resultat
                     result = cursor.fetchone()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -128,15 +104,10 @@ class PaiementDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT moyen_paiement FROM Paiement WHERE id_paiement = %s"
-                    # Parametres
                     value = (id_paiement,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Resultat
                     result = cursor.fetchone()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -148,15 +119,10 @@ class PaiementDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT montant FROM Paiement WHERE id_paiement = %s"
-                    # Parametres
                     value = (id_paiement,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Resultat
                     result = cursor.fetchone()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -168,14 +134,10 @@ class PaiementDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "INSERT INTO Paiement (date_paiement, montant, moyen_paiement, statut_paiement, id_location) VALUES (%s, %s, %s, %s, %s)"
-                    # Parametres
                     values = (date_paiement, montant, moyen_paiement, statut_paiement, id_location)
-                    # Execution 
                     cursor.execute(query, values)
                     connection.commit()
-                    # Retour
                     return cursor.lastrowid
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -187,17 +149,11 @@ class PaiementDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "UPDATE Paiement SET date_paiement = COALESCE(%s, date_paiement), montant = COALESCE(%s, montant), moyen_paiement = COALESCE(%s, moyen_paiement), statut_paiement = COALESCE(%s, statut_paiement) WHERE id_paiement = %s"
-                    # Parametres
                     values = (date_paiement, montant, moyen_paiement, statut_paiement, id_paiement)
-                    # Execution 
                     cursor.execute(query, values)
-                    # Commit pour sauvegarder les changements
                     connection.commit()
-                    # Resultat
                     result = cursor.rowcount
-                    # Retour
                     return True
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -209,17 +165,11 @@ class PaiementDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "DELETE FROM Paiement WHERE id_paiement = %s"
-                    # Parametres
                     value = (id_paiement,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Commit pour sauvegarder les changements
                     connection.commit()
-                    # Resultat
                     result = cursor.rowcount
-                    # Retour
                     return True
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")

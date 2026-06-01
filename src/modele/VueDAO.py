@@ -58,13 +58,9 @@ class VueDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT * FROM VueVehiculesDisponibles"
-                    # Execution 
                     cursor.execute(query)
-                    # Resultat
                     result = cursor.fetchall()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -76,13 +72,9 @@ class VueDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête
                     query = "SELECT * FROM VueChiffreAffairesMensuel WHERE annee = %s"
-                    # Execution
                     cursor.execute(query, (annee,))
-                    # Resultat
                     result = cursor.fetchall()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -94,13 +86,9 @@ class VueDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête
                     query = "SELECT * FROM VueRapportAnnuel WHERE annee = %s"
-                    # Execution
                     cursor.execute(query, (annee,))
-                    # Resultat
                     result = cursor.fetchone()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")

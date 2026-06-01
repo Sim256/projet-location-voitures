@@ -29,15 +29,10 @@ class FraisSupplementaireDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT * FROM FraisSupplementaire WHERE id_frais = %s"
-                    # Parametres
                     value = (id_frais,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Resultat
                     result = cursor.fetchone()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -49,13 +44,9 @@ class FraisSupplementaireDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT * FROM FraisSupplementaire"
-                    # Execution 
                     cursor.execute(query)
-                    # Resultat
                     result = cursor.fetchall()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -67,15 +58,10 @@ class FraisSupplementaireDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT montant FROM FraisSupplementaire WHERE id_frais = %s"
-                    # Parametres
                     value = (id_frais,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Resultat
                     result = cursor.fetchone()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -87,15 +73,10 @@ class FraisSupplementaireDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT description FROM FraisSupplementaire WHERE id_frais = %s"
-                    # Parametres
                     value = (id_frais,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Resultat
                     result = cursor.fetchone()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -107,14 +88,10 @@ class FraisSupplementaireDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "INSERT INTO FraisSupplementaire (type_frais, montant, description, date_frais, id_location) VALUES (%s, %s, %s, %s, %s)"
-                    # Parametres
                     values = (type_frais, montant, description, date_frais, id_location)
-                    # Execution 
                     cursor.execute(query, values)
                     connection.commit()
-                    # Retour
                     return cursor.lastrowid
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -128,12 +105,9 @@ class FraisSupplementaireDAO:
                 with connection.cursor() as cursor:
                     # Construction de la requête de mise à jour
                     query = "UPDATE FraisSupplementaire SET type_frais = COALESCE(%s, type_frais), montant = COALESCE(%s, montant), description = COALESCE(%s, description), date_frais = COALESCE(%s, date_frais), id_location = COALESCE(%s, id_location) WHERE id_frais = %s"
-                    # Parametres
                     values = (type_frais, montant, description, date_frais, id_location, id_frais)
-                    # Execution 
                     cursor.execute(query, values)
                     connection.commit()
-                    # Retour
                     return True
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -145,14 +119,10 @@ class FraisSupplementaireDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "DELETE FROM FraisSupplementaire WHERE id_frais = %s"
-                    # Parametres
                     value = (id_frais,)
-                    # Execution 
                     cursor.execute(query, value)
                     connection.commit()
-                    # Retour
                     return True
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")

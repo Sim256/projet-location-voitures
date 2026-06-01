@@ -160,18 +160,26 @@ class Application:
                     """
                     email = self.vue.get_email_member_comptabilite()
                     id_employe = self.employe_dao.get_id_employe_by_email(email)
+                    if not id_employe:
+                        self.vue.display_invalid_option_message()
+                        continue
                     comptable = self.comptable_dao.get_comptable_by_id(id_employe)
                     if self.vue.is_comptabilite_member_valid(comptable):
-                        year = self.vue.get_year_for_sales_report()
-                        # Utilisation du rôle comptable_user pour démontrer les permissions RGPD/Sécurité
-                        compta_vue_dao = VueDAO(host='localhost', user='comptable_user', password='compta123', database='location_voitures', port=3307)
-                        report_mensuel = compta_vue_dao.get_chiffre_affaires_mensuel_by_annee(year)
-                        report_annuel = compta_vue_dao.get_chiffre_affaires_annuel(year)
-                        chiffre_annuel = report_annuel[1] if report_annuel else 0
-                        self.vue.display_sales_report(chiffre_annuel, report_mensuel, year)
+                        try:
+                            year = self.vue.get_year_for_sales_report()
+                            year = int(year)
+                            # Utilisation du rôle comptable_user pour démontrer les permissions RGPD/Sécurité
+                            compta_vue_dao = VueDAO(host='localhost', user='comptable_user', password='compta123', database='location_voitures', port=3307)
+                            report_mensuel = compta_vue_dao.get_chiffre_affaires_mensuel_by_annee(year)
+                            report_annuel = compta_vue_dao.get_chiffre_affaires_annuel(year)
+                            chiffre_annuel = report_annuel[1] if report_annuel else 0
+                            self.vue.display_sales_report(chiffre_annuel, report_mensuel, year)
+                        except ValueError:
+                            self.vue.display_invalid_option_message()
+                        except Exception as e:
+                            print(f"Erreur inattendue lors de la génération du rapport : {e}")
 
                 case '7':
-                    # Retourner un véhicule
                     email = self.vue.get_email_client()
                     id_client = self.client_dao.get_id_client_by_email(email)
                     if not id_client:
@@ -205,11 +213,14 @@ class Application:
                     date_retour, new_km = self.vue.get_retour_infos()
                     id_vehicule = loc_to_close[9]
                     
-                    # Mise à jour DB
-                    res_loc = self.location_dao.update_location(id_location=id_location, date_retour_reelle=date_retour, kilometrage_retour=new_km, statut_location='terminee')
-                    res_veh = self.vehicule_dao.update_vehicule(id_vehicule=id_vehicule, kilometrage_actuel=new_km, etat_vehicule='disponible')
-                    
-                    self.vue.display_retour_confirmation(res_loc and res_veh)
+                    try:
+                        # Mise à jour DB
+                        res_loc = self.location_dao.update_location(id_location=id_location, date_retour_reelle=date_retour, kilometrage_retour=new_km, statut_location='terminee')
+                        res_veh = self.vehicule_dao.update_vehicule(id_vehicule=id_vehicule, kilometrage_actuel=new_km, etat_vehicule='disponible')
+                        
+                        self.vue.display_retour_confirmation(res_loc and res_veh)
+                    except Exception as e:
+                        print(f"Erreur inattendue lors du retour du véhicule : {e}")
 
                 case _:
                     self.vue.display_invalid_option_message()

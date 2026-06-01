@@ -28,15 +28,10 @@ class ComptableDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT * FROM Comptable WHERE id_employe = %s"
-                    # Parametres
                     value = (id_employe,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Resultat
                     result = cursor.fetchone()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -48,13 +43,9 @@ class ComptableDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT * FROM Comptable"
-                    # Execution 
                     cursor.execute(query)
-                    # Resultat
                     result = cursor.fetchall()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -66,15 +57,10 @@ class ComptableDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT salaire FROM Comptable WHERE id_employe = %s"
-                    # Parametres
                     value = (id_employe,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Resultat
                     result = cursor.fetchone()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -86,15 +72,10 @@ class ComptableDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "SELECT description_role FROM Comptable WHERE id_employe = %s"
-                    # Parametres
                     value = (id_employe,)
-                    # Execution 
                     cursor.execute(query, value)
-                    # Resultat
                     result = cursor.fetchone()
-                    # Retour
                     return result
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -106,15 +87,10 @@ class ComptableDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête 
                     query = "INSERT INTO Comptable (id_employe, description_role, salaire) VALUES (%s, %s, %s)"
-                    # Parametres
                     values = (id_employe, description_role, salaire)
-                    # Execution 
                     cursor.execute(query, values)
-                    # Commit pour sauvegarder les changements
                     connection.commit()
-                    # Retour
                     return cursor.lastrowid
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -126,15 +102,10 @@ class ComptableDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête
                     query = "UPDATE Comptable SET description_role = COALESCE(%s, description_role), salaire = COALESCE(%s, salaire) WHERE id_employe = %s"
-                    # Parametres
                     values = (description_role, salaire, id_employe)
-                    # Execution
                     cursor.execute(query, values)
-                    # Commit pour sauvegarder les changements
                     connection.commit()
-                    # Retour
                     return True
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
@@ -146,15 +117,10 @@ class ComptableDAO:
         try:
             with mysql.connector.connect(**self.config) as connection:
                 with connection.cursor() as cursor:
-                    # Requête
                     query = "DELETE FROM Comptable WHERE id_employe = %s"
-                    # Parametres
                     value = (id_employe,)
-                    # Execution
                     cursor.execute(query, value)
-                    # Commit pour sauvegarder les changements
                     connection.commit()
-                    # Retour
                     return True
         except Error as e:
             print(f"Error while connecting to MySQL: {e}")
