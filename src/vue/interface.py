@@ -234,7 +234,10 @@ class VueTerminal:
         print("=== Rapport annuel des ventes de l'année", year, "===")
         print(f"Chiffre d'affaires annuel: {annual_revenue} €")
         print("Chiffres d'affaires mensuels:")
-        for row in monthly_revenues:
-            print(f"Mois {row[1]}: {row[2]} €")
+        if not monthly_revenues:
+            print("  Aucune transaction enregistrée pour cette année.")
+        else:
+            for row in monthly_revenues:
+                print(f"  Mois {row[1]}: {row[2]} €")
         print("===============================")
 
