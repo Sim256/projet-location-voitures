@@ -1,30 +1,44 @@
 from datetime import date
 
+class Colors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
 
 class VueTerminal:
     """Classe représentant la vue en ligne de commande pour l'application de location de voitures"""
     def display_main_menu(self):
-        print("=== Menu Principal ===")
-        print("0. Quitter")
+        print(f"{Colors.HEADER}=== Menu Principal ==={Colors.ENDC}")
+        print(f"{Colors.FAIL}0. Quitter{Colors.ENDC}")
         print("=======================")
-        print("1. Inscription")
+        print(f"{Colors.OKGREEN}1. Inscription")
         print("2. Informations personnelles")
         print("3. Modifier les informations personnelles")
-        print("4. Désinscription")
-        print("5. Louer une voiture")
-        print("6. Rapport annuel des ventes")
-        print("7. Retourner un véhicule")
+        print(f"4. Désinscription{Colors.ENDC}")
+        print(f"{Colors.OKCYAN}5. Louer une voiture{Colors.ENDC}")
+        print(f"{Colors.OKBLUE}6. Rapport annuel des ventes{Colors.ENDC}")
+        print(f"{Colors.WARNING}7. Retourner un véhicule{Colors.ENDC}")
         print("=======================")
-        return input("Choisissez une option: ")
+        return input(f"{Colors.BOLD}Choisissez une option: {Colors.ENDC}")
     
     def display_welcome_message(self):
-        print("Bienvenue dans notre application de location de voitures!")
+        print(f"{Colors.OKCYAN}{Colors.BOLD}")
+        print(r"""       ______
+      / |_||_\`.__
+     (   _    _ _ \
+     =`-(_)--(_)-' """)
+        print(f" Bienvenue dans l'application de location de voitures !{Colors.ENDC}\n")
     
     def display_goodbye_message(self):
         print("Au revoir!")
     
     def display_invalid_option_message(self):
-        print("Option invalide, veuillez réessayer.")
+        print(f"{Colors.FAIL}Option invalide, veuillez réessayer.{Colors.ENDC}\n")
 
     # ==== Gestion des clients ====
 
